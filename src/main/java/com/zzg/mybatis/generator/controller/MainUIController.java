@@ -87,6 +87,8 @@ public class MainUIController extends BaseFXController {
     @FXML
     private CheckBox annotationDAOCheckBox;
     @FXML
+    private CheckBox annotationMapperCheckBox;
+    @FXML
     private CheckBox useTableNameAliasCheckbox;
     @FXML
     private CheckBox annotationCheckBox;
@@ -396,6 +398,7 @@ public class MainUIController extends BaseFXController {
         generatorConfig.setUseTableNameAlias(useTableNameAliasCheckbox.isSelected());
         generatorConfig.setNeedForUpdate(forUpdateCheckBox.isSelected());
         generatorConfig.setAnnotationDAO(annotationDAOCheckBox.isSelected());
+        generatorConfig.setAnnotationMapper(annotationMapperCheckBox.isSelected());
         generatorConfig.setAnnotation(annotationCheckBox.isSelected());
         generatorConfig.setUseActualColumnNames(useActualColumnNamesCheckbox.isSelected());
         generatorConfig.setEncoding(encodingChoice.getValue());
@@ -426,6 +429,7 @@ public class MainUIController extends BaseFXController {
         useTableNameAliasCheckbox.setSelected(generatorConfig.getUseTableNameAlias());
         forUpdateCheckBox.setSelected(generatorConfig.isNeedForUpdate());
         annotationDAOCheckBox.setSelected(generatorConfig.isAnnotationDAO());
+        annotationMapperCheckBox.setSelected(generatorConfig.isAnnotationMapper());
         annotationCheckBox.setSelected(generatorConfig.isAnnotation());
         useActualColumnNamesCheckbox.setSelected(generatorConfig.isUseActualColumnNames());
         encodingChoice.setValue(generatorConfig.getEncoding());

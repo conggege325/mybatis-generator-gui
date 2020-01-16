@@ -250,6 +250,13 @@ public class MybatisGeneratorBridge {
                 context.addPluginConfiguration(pluginConfiguration);
             }
         }
+        // mapper 注解插件
+        if(generatorConfig.isAnnotationMapper()) {
+            PluginConfiguration pluginConfiguration = new PluginConfiguration();
+            pluginConfiguration.addProperty("type", "org.mybatis.generator.plugins.MapperAnnotationPlugin");
+            pluginConfiguration.setConfigurationType("org.mybatis.generator.plugins.MapperAnnotationPlugin");
+            context.addPluginConfiguration(pluginConfiguration);
+        }
         if (generatorConfig.isUseDAOExtendStyle()) {
             if (DbType.MySQL.name().equals(dbType) || DbType.MySQL_8.name().equals(dbType)
                     || DbType.PostgreSQL.name().equals(dbType)) {
