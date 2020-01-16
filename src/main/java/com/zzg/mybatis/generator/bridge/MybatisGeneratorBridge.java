@@ -189,6 +189,13 @@ public class MybatisGeneratorBridge {
         serializablePluginConfiguration.setConfigurationType("org.mybatis.generator.plugins.SerializablePlugin");
         context.addPluginConfiguration(serializablePluginConfiguration);
 
+        // 不区分大小写的LIKE搜索的插件
+        if(generatorConfig.isUseExample()) {
+            PluginConfiguration pluginConfiguration = new PluginConfiguration();
+            pluginConfiguration.addProperty("type", "org.mybatis.generator.plugins.CaseInsensitiveLikePlugin");
+            pluginConfiguration.setConfigurationType("org.mybatis.generator.plugins.CaseInsensitiveLikePlugin");
+            context.addPluginConfiguration(pluginConfiguration);
+        }
         // Lombok 插件
         if (generatorConfig.isUseLombokPlugin()) {
             PluginConfiguration pluginConfiguration = new PluginConfiguration();
