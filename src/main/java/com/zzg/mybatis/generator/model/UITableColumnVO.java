@@ -12,6 +12,8 @@ public class UITableColumnVO {
 
     private BooleanProperty checked = new SimpleBooleanProperty(true); // Default set to true
 
+    private BooleanProperty identitied = new SimpleBooleanProperty(false); // Default set to false
+
     private StringProperty columnName = new SimpleStringProperty();
 
     private StringProperty javaType = new SimpleStringProperty();
@@ -56,6 +58,18 @@ public class UITableColumnVO {
 
     public void setChecked(Boolean checked) {
         this.checked.set(checked);
+    }
+
+    public BooleanProperty identitiedProperty() {
+        return identitied;
+    }
+
+    public Boolean getIdentitied() {
+        return identitied.get();
+    }
+
+    public void setIdentitied(Boolean identitied) {
+        this.identitied.set(identitied);
     }
 
     public StringProperty typeHandleProperty() {

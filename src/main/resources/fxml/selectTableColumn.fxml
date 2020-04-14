@@ -9,6 +9,7 @@
       <TableView fx:id="columnListView" editable="true" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
         <columns>
           <TableColumn fx:id="checkedColumn" prefWidth="75.0" text="Checked" />
+          <TableColumn fx:id="identitiedColumn" prefWidth="75.0" text="Identity Column" />
           <TableColumn fx:id="columnNameColumn" prefWidth="132.0" text="Column Name" />
             <TableColumn fx:id="jdbcTypeColumn" prefWidth="122.0" text="JDBC Type" />
             <TableColumn fx:id="javaTypeColumn" prefWidth="121.0" text="Java Type" />

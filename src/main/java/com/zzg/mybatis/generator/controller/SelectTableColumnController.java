@@ -26,6 +26,8 @@ public class SelectTableColumnController extends BaseFXController {
     @FXML
     private TableColumn<UITableColumnVO, Boolean> checkedColumn;
     @FXML
+    private TableColumn<UITableColumnVO, Boolean> identitiedColumn;
+    @FXML
     private TableColumn<UITableColumnVO, String> columnNameColumn;
     @FXML
     private TableColumn<UITableColumnVO, String> jdbcTypeColumn;
@@ -44,12 +46,14 @@ public class SelectTableColumnController extends BaseFXController {
     public void initialize(URL location, ResourceBundle resources) {
         // cellvaluefactory
         checkedColumn.setCellValueFactory(new PropertyValueFactory<>("checked"));
+        identitiedColumn.setCellValueFactory(new PropertyValueFactory<>("identitied"));
         columnNameColumn.setCellValueFactory(new PropertyValueFactory<>("columnName"));
         jdbcTypeColumn.setCellValueFactory(new PropertyValueFactory<>("jdbcType"));
         propertyNameColumn.setCellValueFactory(new PropertyValueFactory<>("propertyName"));
         typeHandlerColumn.setCellValueFactory(new PropertyValueFactory<>("typeHandler"));
         // Cell Factory that customize how the cell should render
         checkedColumn.setCellFactory(CheckBoxTableCell.forTableColumn(checkedColumn));
+        identitiedColumn.setCellFactory(CheckBoxTableCell.forTableColumn(identitiedColumn));
         javaTypeColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         // handle commit event to save the user input data
         javaTypeColumn.setOnEditCommit(event -> {
@@ -81,6 +85,9 @@ public class SelectTableColumnController extends BaseFXController {
                     columnOverride.setJavaProperty(item.getPropertyName());
                     columnOverride.setJavaType(item.getJavaType());
                     columnOverrides.add(columnOverride);
+                }
+                if (item.getIdentitied()) {
+                    mainUIController.setIdentitiedKeyColumn(item.getColumnName());
                 }
             });
             mainUIController.setIgnoredColumns(ignoredColumns);

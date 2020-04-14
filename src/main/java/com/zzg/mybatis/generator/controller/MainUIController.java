@@ -470,6 +470,10 @@ public class MainUIController extends BaseFXController {
         this.columnOverrides = columnOverrides;
     }
 
+    public void setIdentitiedKeyColumn(String columnName) {
+        generateKeysField.setText(columnName);
+    }
+
     /**
      * 检查并创建不存在的文件夹
      *
