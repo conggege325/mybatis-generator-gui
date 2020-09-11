@@ -191,6 +191,12 @@ public class MybatisGeneratorBridge {
         serializablePluginConfiguration.setConfigurationType("org.mybatis.generator.plugins.SerializablePlugin");
         context.addPluginConfiguration(serializablePluginConfiguration);
 
+        // 批量插入的插件
+        PluginConfiguration insertBatchPluginConfiguration = new PluginConfiguration();
+        insertBatchPluginConfiguration.addProperty("type", "com.zzg.mybatis.generator.plugins.InsertBatchPlugin");
+        insertBatchPluginConfiguration.setConfigurationType("com.zzg.mybatis.generator.plugins.InsertBatchPlugin");
+        context.addPluginConfiguration(insertBatchPluginConfiguration);
+
         // 不区分大小写的LIKE搜索的插件
         if(generatorConfig.isUseExample()) {
             PluginConfiguration pluginConfiguration = new PluginConfiguration();
