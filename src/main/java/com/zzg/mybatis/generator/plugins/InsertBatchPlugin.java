@@ -43,36 +43,9 @@ public class InsertBatchPlugin extends PluginAdapter {
                 XmlElement answer = new XmlElement("insert");
 
                 answer.addAttribute(new Attribute("id", "insertBatch"));
-
-                FullyQualifiedJavaType parameterType;
-//                if (isSimple) {
-                    parameterType = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType());
-//                } else {
-//                    parameterType = introspectedTable.getRules()
-//                            .calculateAllFieldsClass();
-//                }
-                answer.addAttribute(new Attribute("parameterType", parameterType.getFullyQualifiedName()));
+                answer.addAttribute(new Attribute("parameterType", "list"));
 
                 context.getCommentGenerator().addComment(answer);
-
-//                GeneratedKey gk = introspectedTable.getGeneratedKey();
-//                if (gk != null) {
-//                    IntrospectedColumn introspectedColumn = introspectedTable.getColumn(gk.getColumn());
-//                    // if the column is null, then it's a configuration error. The
-//                    // warning has already been reported
-//                    if (introspectedColumn != null) {
-//                        if (gk.isJdbcStandard()) {
-//                            answer.addAttribute(new Attribute(
-//                                    "useGeneratedKeys", "true")); //$NON-NLS-1$ //$NON-NLS-2$
-//                            answer.addAttribute(new Attribute(
-//                                    "keyProperty", introspectedColumn.getJavaProperty())); //$NON-NLS-1$
-//                            answer.addAttribute(new Attribute(
-//                                    "keyColumn", introspectedColumn.getActualColumnName())); //$NON-NLS-1$
-//                        } else {
-//                            answer.addElement(getSelectKey(introspectedColumn, gk));
-//                        }
-//                    }
-//                }
 
                 StringBuilder insertClause = new StringBuilder();
 
@@ -80,21 +53,25 @@ public class InsertBatchPlugin extends PluginAdapter {
                 insertClause.append(introspectedTable.getFullyQualifiedTableNameAtRuntime());
                 insertClause.append(" (");
 
+                XmlElement foreachXmlElement = new XmlElement("foreach");
+                foreachXmlElement.addAttribute(new Attribute("collection", "list"));
+                foreachXmlElement.addAttribute(new Attribute("item", "item"));
+                foreachXmlElement.addAttribute(new Attribute("open", "values"));
+                foreachXmlElement.addAttribute(new Attribute("separator", ","));
+
                 StringBuilder valuesClause = new StringBuilder();
-                valuesClause.append("values (");
+                valuesClause.append("(");
 
                 List<String> valuesClauses = new ArrayList<String>();
                 List<IntrospectedColumn> columns = ListUtilities.removeIdentityAndGeneratedAlwaysColumns(introspectedTable.getAllColumns());
                 for (int i = 0; i < columns.size(); i++) {
                     IntrospectedColumn introspectedColumn = columns.get(i);
 
-                    insertClause.append(MyBatis3FormattingUtilities
-                            .getEscapedColumnName(introspectedColumn));
-                    valuesClause.append(MyBatis3FormattingUtilities
-                            .getParameterClause(introspectedColumn));
+                    insertClause.append(MyBatis3FormattingUtilities.getEscapedColumnName(introspectedColumn));
+                    valuesClause.append(MyBatis3FormattingUtilities.getParameterClause(introspectedColumn, "item."));
                     if (i + 1 < columns.size()) {
-                        insertClause.append(", "); //$NON-NLS-1$
-                        valuesClause.append(", "); //$NON-NLS-1$
+                        insertClause.append(", ");
+                        valuesClause.append(", ");
                     }
 
                     if (valuesClause.length() > 80) {
@@ -115,11 +92,11 @@ public class InsertBatchPlugin extends PluginAdapter {
                 valuesClauses.add(valuesClause.toString());
 
                 for (String clause : valuesClauses) {
-                    answer.addElement(new TextElement(clause));
+                    foreachXmlElement.addElement(new TextElement(clause));
                 }
+                answer.addElement(foreachXmlElement);
 
-                if (context.getPlugins().sqlMapInsertElementGenerated(answer,
-                        introspectedTable)) {
+                if (context.getPlugins().sqlMapInsertElementGenerated(answer, introspectedTable)) {
                     parentElement.addElement(answer);
                 }
             }
@@ -152,8 +129,6 @@ public class InsertBatchPlugin extends PluginAdapter {
                 // 设置参数类型是对象
                 FullyQualifiedJavaType parameterType = FullyQualifiedJavaType.getNewListInstance();
                 parameterType.addTypeArgument(new FullyQualifiedJavaType(introspectedTable.getBaseRecordType()));
-                // import参数类型对象
-                importedTypes.add(parameterType);
                 // 为方法添加参数
                 method.addParameter(new Parameter(parameterType, "list"));
 
