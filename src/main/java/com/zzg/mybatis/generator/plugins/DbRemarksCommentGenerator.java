@@ -93,7 +93,6 @@ public class DbRemarksCommentGenerator implements CommentGenerator {
 
 	@Override
 	public void addClassAnnotation(InnerClass innerClass, IntrospectedTable introspectedTable, Set<FullyQualifiedJavaType> set) {
-
 	}
 
 	public void addConfigurationProperties(Properties properties) {
@@ -111,7 +110,8 @@ public class DbRemarksCommentGenerator implements CommentGenerator {
     public void addModelClassComment(TopLevelClass topLevelClass,
                                 IntrospectedTable introspectedTable) {
         topLevelClass.addJavaDocLine("/**");
-        topLevelClass.addJavaDocLine(" * Table name: " + introspectedTable.getFullyQualifiedTable().getIntrospectedTableName());
+        topLevelClass.addJavaDocLine(" * 表名: " + introspectedTable.getFullyQualifiedTable().getIntrospectedTableName());
+        topLevelClass.addJavaDocLine(" * @description " + introspectedTable.getRemarks());
         topLevelClass.addJavaDocLine(" * @author ZhangCong");
         topLevelClass.addJavaDocLine(" */");
         if(isAnnotations) {
