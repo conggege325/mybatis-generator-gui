@@ -111,8 +111,8 @@ public class DbRemarksCommentGenerator implements CommentGenerator {
     public void addModelClassComment(TopLevelClass topLevelClass,
                                 IntrospectedTable introspectedTable) {
         topLevelClass.addJavaDocLine("/**");
-        topLevelClass.addJavaDocLine(" * " + introspectedTable.getFullyQualifiedTable().getIntrospectedTableName());
-        topLevelClass.addJavaDocLine(" * @author ");
+        topLevelClass.addJavaDocLine(" * Table name: " + introspectedTable.getFullyQualifiedTable().getIntrospectedTableName());
+        topLevelClass.addJavaDocLine(" * @author ZhangCong");
         topLevelClass.addJavaDocLine(" */");
         if(isAnnotations) {
             topLevelClass.addAnnotation("@Table(name=\"" + introspectedTable.getFullyQualifiedTableNameAtRuntime() + "\")");
@@ -170,11 +170,27 @@ public class DbRemarksCommentGenerator implements CommentGenerator {
     public void addGetterComment(Method method,
             IntrospectedTable introspectedTable,
             IntrospectedColumn introspectedColumn) {
+        if (StringUtility.stringHasValue(introspectedColumn.getRemarks())) {
+            method.addJavaDocLine("/**");
+            StringBuilder sb = new StringBuilder();
+            sb.append(" * ");
+            sb.append("获取：" + introspectedColumn.getRemarks());
+            method.addJavaDocLine(sb.toString());
+            method.addJavaDocLine(" */");
+        }
     }
 
     public void addSetterComment(Method method,
             IntrospectedTable introspectedTable,
             IntrospectedColumn introspectedColumn) {
+        if (StringUtility.stringHasValue(introspectedColumn.getRemarks())) {
+            method.addJavaDocLine("/**");
+            StringBuilder sb = new StringBuilder();
+            sb.append(" * ");
+            sb.append("设置：" + introspectedColumn.getRemarks());
+            method.addJavaDocLine(sb.toString());
+            method.addJavaDocLine(" */");
+        }
     }
 
     public void addClassComment(InnerClass innerClass,
