@@ -10,6 +10,8 @@ import com.zzg.mybatis.generator.util.DbUtil;
 import com.zzg.mybatis.generator.util.MyStringUtils;
 import com.zzg.mybatis.generator.view.AlertUtil;
 import com.zzg.mybatis.generator.view.UIProgressCallback;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -115,6 +117,9 @@ public class MainUIController extends BaseFXController {
 
     @FXML
     private ChoiceBox<String> encodingChoice;
+
+    @FXML
+    private CheckBox updateInterfaceNameCheckbox;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -227,6 +232,20 @@ public class MainUIController extends BaseFXController {
 		setTooltip();
 		//默认选中第一个，否则如果忘记选择，没有对应错误提示
         encodingChoice.getSelectionModel().selectFirst();
+
+        // 监听实体类文本框的改变事件（根据实体类名称自动更新更新接口名称）
+        domainObjectNameField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (updateInterfaceNameCheckbox.isSelected()) {
+                    if (newValue == null || newValue.equals("")) {
+                        mapperName.setText("");
+                    } else {
+                        mapperName.setText(newValue + "Mapper");
+                    }
+                }
+            }
+        });
 	}
 
 	private void setTooltip() {

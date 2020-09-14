@@ -130,10 +130,11 @@ public class InsertBatchPlugin extends PluginAdapter {
                 FullyQualifiedJavaType parameterType = FullyQualifiedJavaType.getNewListInstance();
                 parameterType.addTypeArgument(new FullyQualifiedJavaType(introspectedTable.getBaseRecordType()));
                 // 为方法添加参数
-                method.addParameter(new Parameter(parameterType, "list"));
+                method.addParameter(new Parameter(parameterType, "records"));
 
                 context.getCommentGenerator().addGeneralMethodComment(method, introspectedTable);
-                if (context.getPlugins().clientSelectByPrimaryKeyMethodGenerated(method, interfaze, introspectedTable)) {
+
+                if (context.getPlugins().clientInsertMethodGenerated(method, interfaze, introspectedTable)) {
                     interfaze.addImportedTypes(importedTypes);
                     interfaze.addMethod(method);
                 }
