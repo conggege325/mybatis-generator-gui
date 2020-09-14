@@ -54,7 +54,7 @@ public class CommonDAOInterfacePlugin extends PluginAdapter {
             mapperInterface.setVisibility(JavaVisibility.PUBLIC);
             mapperInterface.addJavaDocLine("/**");
             mapperInterface.addJavaDocLine(" * " + "DAO公共基类，由MybatisGenerator自动生成请勿修改");
-            mapperInterface.addJavaDocLine(" * " + "@param <Model> The Model Class 这里是泛型不是Model类");
+            mapperInterface.addJavaDocLine(" * " + "@param <M> The Model Class 这里是泛型不是Model类");
             mapperInterface.addJavaDocLine(" * " + "@param <PK> The Primary Key Class 如果是无主键，则可以用Model来跳过，如果是多主键则是Key类");
 			if (isUseExample()) {
 				mapperInterface.addJavaDocLine(" * " + "@param <E> The Example Class");
@@ -62,7 +62,7 @@ public class CommonDAOInterfacePlugin extends PluginAdapter {
             mapperInterface.addJavaDocLine(" */");
 
             FullyQualifiedJavaType daoBaseInterfaceJavaType = mapperInterface.getType();
-            daoBaseInterfaceJavaType.addTypeArgument(new FullyQualifiedJavaType("Model"));
+            daoBaseInterfaceJavaType.addTypeArgument(new FullyQualifiedJavaType("M"));
             daoBaseInterfaceJavaType.addTypeArgument(new FullyQualifiedJavaType("PK extends Serializable"));
 			if (isUseExample()) {
 				daoBaseInterfaceJavaType.addTypeArgument(new FullyQualifiedJavaType("E"));
@@ -158,7 +158,7 @@ public class CommonDAOInterfacePlugin extends PluginAdapter {
 
     private void interceptModelParam(Method method) {
         method.getParameters().clear();
-        method.addParameter(new Parameter(new FullyQualifiedJavaType("Model"), "record"));
+        method.addParameter(new Parameter(new FullyQualifiedJavaType("M"), "record"));
         methods.add(method);
     }
 
@@ -169,7 +169,7 @@ public class CommonDAOInterfacePlugin extends PluginAdapter {
 				interceptExampleParam(method);
 			}else{
 				method.getParameters().clear();
-				Parameter parameter1 = new Parameter(new FullyQualifiedJavaType("Model"), "record");
+				Parameter parameter1 = new Parameter(new FullyQualifiedJavaType("M"), "record");
 				parameter1.addAnnotation("@Param(\"record\")");
 				method.addParameter(parameter1);
 
@@ -221,7 +221,7 @@ public class CommonDAOInterfacePlugin extends PluginAdapter {
                                                                  Interface interfaze, IntrospectedTable introspectedTable) {
         if (isUseExample()) {
 			interceptExampleParam(method);
-			method.setReturnType(new FullyQualifiedJavaType("List<Model>"));
+			method.setReturnType(new FullyQualifiedJavaType("List<M>"));
 		}
         return false;
     }
@@ -231,7 +231,7 @@ public class CommonDAOInterfacePlugin extends PluginAdapter {
                                                                     Interface interfaze, IntrospectedTable introspectedTable) {
         if (isUseExample()) {
 			interceptExampleParam(method);
-			method.setReturnType(new FullyQualifiedJavaType("List<Model>"));
+			method.setReturnType(new FullyQualifiedJavaType("List<M>"));
 		}
         return false;
     }
@@ -240,7 +240,7 @@ public class CommonDAOInterfacePlugin extends PluginAdapter {
     public boolean clientSelectByPrimaryKeyMethodGenerated(Method method,
                                                            Interface interfaze, IntrospectedTable introspectedTable) {
     	interceptPrimaryKeyParam(method);
-        method.setReturnType(new FullyQualifiedJavaType("Model"));
+        method.setReturnType(new FullyQualifiedJavaType("M"));
         return false;
     }
 
