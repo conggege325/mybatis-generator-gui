@@ -28,7 +28,7 @@ public class CommonDAOInterfacePlugin extends PluginAdapter {
     public CommonDAOInterfacePlugin() {
         shellCallback = new DefaultShellCallback(false);
     }
-    
+
     private boolean isUseExample() {
     	return "true".equals(getProperties().getProperty("useExample"));
 	}
@@ -72,6 +72,10 @@ public class CommonDAOInterfacePlugin extends PluginAdapter {
                 for (Method method : methods) {
                     mapperInterface.addMethod(method);
                 }
+            }
+
+            if (Boolean.TRUE.toString().equals(context.getProperty("commonDAOInterfaceGenerated"))) {
+                InsertBatchPlugin.generateMethod(context, mapperInterface, introspectedTable, "M");
             }
 
             List<GeneratedJavaFile> generatedJavaFiles = introspectedTable.getGeneratedJavaFiles();

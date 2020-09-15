@@ -13,12 +13,10 @@ import org.mybatis.generator.codegen.mybatis3.ListUtilities;
 import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
 import org.mybatis.generator.codegen.mybatis3.javamapper.elements.AbstractJavaMapperMethodGenerator;
 import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.AbstractXmlElementGenerator;
-import org.mybatis.generator.config.GeneratedKey;
+import org.mybatis.generator.config.Context;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * 生成 mybatis 批量插入的插件
@@ -112,31 +110,8 @@ public class InsertBatchPlugin extends PluginAdapter {
         AbstractJavaMapperMethodGenerator methodGenerator = new AbstractJavaMapperMethodGenerator() {
             @Override
             public void addInterfaceElements(Interface interfaze) {
-                // 先创建import对象
-                Set<FullyQualifiedJavaType> importedTypes = new TreeSet<FullyQualifiedJavaType>();
-                // 添加Lsit的包
-                importedTypes.add(FullyQualifiedJavaType.getNewListInstance());
-
-                // 创建方法对象
-                Method method = new Method();
-                // 设置该方法为public
-                method.setVisibility(JavaVisibility.PUBLIC);
-                // 设置返回类型
-                method.setReturnType(FullyQualifiedJavaType.getIntInstance());
-                // 设置方法名称
-                method.setName("insertBatch");
-
-                // 设置参数类型是对象
-                FullyQualifiedJavaType parameterType = FullyQualifiedJavaType.getNewListInstance();
-                parameterType.addTypeArgument(new FullyQualifiedJavaType(introspectedTable.getBaseRecordType()));
-                // 为方法添加参数
-                method.addParameter(new Parameter(parameterType, "records"));
-
-                context.getCommentGenerator().addGeneralMethodComment(method, introspectedTable);
-
-                if (context.getPlugins().clientInsertMethodGenerated(method, interfaze, introspectedTable)) {
-                    interfaze.addImportedTypes(importedTypes);
-                    interfaze.addMethod(method);
+                if (!Boolean.TRUE.toString().equals(context.getProperty("commonDAOInterfaceGenerated"))) {
+                    generateMethod(context, interfaze, introspectedTable, introspectedTable.getBaseRecordType());
                 }
             }
         };
@@ -144,5 +119,21 @@ public class InsertBatchPlugin extends PluginAdapter {
         methodGenerator.setIntrospectedTable(introspectedTable);
         methodGenerator.addInterfaceElements(interfaze);
         return super.clientGenerated(interfaze, topLevelClass, introspectedTable);
+    }
+
+    public static void generateMethod(Context context, Interface interfaze, IntrospectedTable introspectedTable, String genericType) {
+        Method method = new Method();
+        method.setVisibility(JavaVisibility.PUBLIC);
+        method.setReturnType(FullyQualifiedJavaType.getIntInstance());
+        method.setName("insertBatch");
+
+        FullyQualifiedJavaType parameterType = FullyQualifiedJavaType.getNewListInstance();
+        parameterType.addTypeArgument(new FullyQualifiedJavaType(genericType));
+        method.addParameter(new Parameter(parameterType, "records"));
+
+        context.getCommentGenerator().addGeneralMethodComment(method, introspectedTable);
+
+        interfaze.addImportedType(FullyQualifiedJavaType.getNewListInstance());
+        interfaze.addMethod(method);
     }
 }

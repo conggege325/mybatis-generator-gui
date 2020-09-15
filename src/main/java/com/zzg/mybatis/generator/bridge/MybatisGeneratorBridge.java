@@ -273,6 +273,7 @@ public class MybatisGeneratorBridge {
 				pluginConfiguration.addProperty("type", "com.zzg.mybatis.generator.plugins.CommonDAOInterfacePlugin");
                 pluginConfiguration.setConfigurationType("com.zzg.mybatis.generator.plugins.CommonDAOInterfacePlugin");
                 context.addPluginConfiguration(pluginConfiguration);
+                context.addProperty("commonDAOInterfaceGenerated", Boolean.TRUE.toString());
             }
         }
 
