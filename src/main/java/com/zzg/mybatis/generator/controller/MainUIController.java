@@ -122,6 +122,9 @@ public class MainUIController extends BaseFXController {
     @FXML
     private CheckBox updateInterfaceNameCheckbox;
 
+    @FXML
+    private CheckBox useActualTableNameCheckbox;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         ImageView dbImage = new ImageView("icons/computer.png");
@@ -222,9 +225,11 @@ public class MainUIController extends BaseFXController {
                         selectedDatabaseConfig = (DatabaseConfig) treeItem.getParent().getGraphic().getUserData();
                         this.tableName = tableName;
                         tableNameField.setText(tableName);
-                        String javaName = CaseUtils.toCamelCase(tableName, true, '_');
-                        domainObjectNameField.setText(javaName);
-                        mapperName.setText(javaName + "Mapper");
+                        if (useActualTableNameCheckbox.isSelected()) {
+                            domainObjectNameField.setText(tableName.toUpperCase());
+                        } else {
+                            domainObjectNameField.setText(CaseUtils.toCamelCase(tableName, true, '_'));
+                        }
                     }
                 }
             });
