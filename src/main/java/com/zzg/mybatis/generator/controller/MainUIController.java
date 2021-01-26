@@ -29,6 +29,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.commons.text.CaseUtils;
 import org.mybatis.generator.config.ColumnOverride;
 import org.mybatis.generator.config.IgnoredColumn;
 import org.slf4j.Logger;
@@ -221,8 +222,9 @@ public class MainUIController extends BaseFXController {
                         selectedDatabaseConfig = (DatabaseConfig) treeItem.getParent().getGraphic().getUserData();
                         this.tableName = tableName;
                         tableNameField.setText(tableName);
-                        domainObjectNameField.setText(tableName.toUpperCase());
-                        mapperName.setText(domainObjectNameField.getText().concat("Mapper"));
+                        String javaName = CaseUtils.toCamelCase(tableName, true, '_');
+                        domainObjectNameField.setText(javaName);
+                        mapperName.setText(javaName + "Mapper");
                     }
                 }
             });
